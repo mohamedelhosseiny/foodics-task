@@ -31,11 +31,16 @@
             </div>
           </div>
 
-          <branch-reservation-item
-            v-for="branch in branchesAcceptingReservations"
-            :key="branch.id"
-            :branch="branch"
-          />
+          <template v-if="areBranchesLoading">
+            <branch-reservation-item-skeleton v-for="i in 8" :key="i" />
+          </template>
+          <template v-else>
+            <branch-reservation-item
+              v-for="branch in branchesAcceptingReservations"
+              :key="branch.id"
+              :branch="branch"
+            />
+          </template>
         </div>
       </div>
     </div>
@@ -48,11 +53,12 @@ import { createNamespacedHelpers } from "vuex";
 import { GET_BRANCHES } from "../store/modules/action-types";
 const { mapState, mapActions } = createNamespacedHelpers("branches");
 import BranchReservationItem from "./branchReservationItem.vue";
-
+import BranchReservationItemSkeleton from "./branchReservationItemSkeleton.vue";
 export default defineComponent({
   name: "BranchesReservations",
   components: {
     BranchReservationItem,
+    BranchReservationItemSkeleton,
   },
 
   created() {
@@ -60,7 +66,7 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(["branches"]),
+    ...mapState(["branches", "areBranchesLoading"]),
 
     branchesAcceptingReservations() {
       return this.branches.filter((branch) => branch.accepts_reservations);
