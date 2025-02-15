@@ -7,7 +7,7 @@
       <h2 class="text-xl font-bold text-left">{{ title }}</h2>
     </div>
 
-    <div class="px-6 py-6">
+    <div>
       <slot />
     </div>
 
@@ -43,12 +43,8 @@ export default {
     },
   },
 
-  watch: {
-    isOpen(newVal) {
-      if (newVal) {
-        this.$el.showModal();
-      }
-    },
+  mounted() {
+    this.$el.showModal();
   },
 
   methods: {
