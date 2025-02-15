@@ -13,6 +13,7 @@
       <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="flex justify-end mb-4">
           <button
+            @click="isAddBranchModalOpen = true"
             class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
           >
             Add Branches
@@ -44,6 +45,11 @@
         </div>
       </div>
     </div>
+
+    <add-branch
+      @close="isAddBranchModalOpen = false"
+      :is-open="isAddBranchModalOpen"
+    />
   </div>
 </template>
 
@@ -54,11 +60,21 @@ import { GET_BRANCHES } from "../store/modules/action-types";
 const { mapState, mapActions } = createNamespacedHelpers("branches");
 import BranchReservationItem from "./branchReservationItem.vue";
 import BranchReservationItemSkeleton from "./branchReservationItemSkeleton.vue";
+import AddBranch from "./addBranch.vue";
+
 export default defineComponent({
   name: "BranchesReservations",
+
   components: {
     BranchReservationItem,
     BranchReservationItemSkeleton,
+    AddBranch,
+  },
+
+  data() {
+    return {
+      isAddBranchModalOpen: false,
+    };
   },
 
   created() {
