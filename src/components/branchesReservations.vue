@@ -31,16 +31,11 @@
             </div>
           </div>
 
-          <div
-            v-for="i in 3"
-            :key="i"
-            class="flex border-b hover:bg-gray-50 cursor-pointer"
-          >
-            <div class="flex-1 py-4">Branch 1</div>
-            <div class="flex-1 py-4">B01</div>
-            <div class="flex-1 py-4">0</div>
-            <div class="flex-1 py-4">30 Minutes</div>
-          </div>
+          <branch-reservation-item
+            v-for="branch in branchesAcceptingReservations"
+            :key="branch.id"
+            :branch="branch"
+          />
         </div>
       </div>
     </div>
@@ -48,7 +43,36 @@
 </template>
 
 <script>
-export default {};
+import { defineComponent } from "vue";
+import { createNamespacedHelpers } from "vuex";
+import { GET_BRANCHES } from "../store/modules/action-types";
+const { mapState, mapActions } = createNamespacedHelpers("branches");
+import BranchReservationItem from "./branchReservationItem.vue";
+
+export default defineComponent({
+  name: "BranchesReservations",
+  components: {
+    BranchReservationItem,
+  },
+
+  created() {
+    this.getBranches();
+  },
+
+  computed: {
+    ...mapState(["branches"]),
+
+    branchesAcceptingReservations() {
+      return this.branches.filter((branch) => branch.accepts_reservations);
+    },
+  },
+
+  methods: {
+    ...mapActions({
+      getBranches: GET_BRANCHES,
+    }),
+  },
+});
 </script>
 
 <style lang="scss" scoped></style>

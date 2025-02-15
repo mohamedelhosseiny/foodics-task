@@ -1,18 +1,18 @@
 <template>
   <div id="app" class="min-h-screen bg-gray-50 p-8">
-    <restaurants-reservations />
+    <branches-reservations />
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import RestaurantsReservations from "./components/restaurantsReservations.vue";
+import BranchesReservations from "./components/branchesReservations.vue";
 
 export default defineComponent({
   name: "App",
 
   components: {
-    RestaurantsReservations,
+    BranchesReservations,
   },
 });
 </script>

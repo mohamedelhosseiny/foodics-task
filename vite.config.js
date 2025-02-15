@@ -15,6 +15,15 @@ export default defineConfig({
       vue: "vue/dist/vue.esm.js",
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://api.foodics.dev/v5",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   css: {
     postcss: "./postcss.config.js",
   },

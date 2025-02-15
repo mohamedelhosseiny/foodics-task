@@ -1,9 +1,14 @@
 import { GET_BRANCHES } from "./action-types";
 import { SET_BRANCHES } from "./mutation-types";
+import api from "@/services/api";
 
 const actions = {
   [GET_BRANCHES]({ commit }) {
-    commit(SET_BRANCHES, branches);
+    api("branches?include[0]=sections&include[1]=sections.tables").then(
+      (data) => {
+        commit(SET_BRANCHES, data.data);
+      }
+    );
   },
 };
 
@@ -21,4 +26,5 @@ export default {
   state,
   mutations,
   actions,
+  namespaced: true,
 };
