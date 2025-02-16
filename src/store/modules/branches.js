@@ -2,6 +2,7 @@ import {
   GET_BRANCHES,
   SET_BRANCHES_LOADING,
   ENABLE_BRANCH_RESERVATIONS,
+  DISABLE_RESERVATIONS,
 } from "./action-types";
 import { SET_BRANCHES } from "./mutation-types";
 import api from "@/services/api";
@@ -29,6 +30,29 @@ const actions = {
       commit(ENABLE_BRANCH_RESERVATIONS, branchId);
     });
   },
+
+  [DISABLE_RESERVATIONS]({ commit }) {
+    const branchesAcceptingReservations = state.branches.filter(
+      (branch) => branch.accepts_reservations
+    );
+
+    commit(SET_BRANCHES_LOADING, true);
+
+    Promise.all(
+      branchesAcceptingReservations.map((branch) =>
+        api(`branches/${branch.id}`, {
+          method: "PUT",
+          body: { accepts_reservations: false },
+        })
+      )
+    )
+      .then(() => {
+        commit(DISABLE_RESERVATIONS);
+      })
+      .finally(() => {
+        commit(SET_BRANCHES_LOADING, false);
+      });
+  },
 };
 
 const mutations = {
@@ -44,6 +68,14 @@ const mutations = {
     state.branches = state.branches.map((branch) =>
       branch.id === branchId
         ? { ...branch, accepts_reservations: true }
+        : branch
+    );
+  },
+
+  [DISABLE_RESERVATIONS](state) {
+    state.branches = state.branches.map((branch) =>
+      branch.accepts_reservations
+        ? { ...branch, accepts_reservations: false }
         : branch
     );
   },
