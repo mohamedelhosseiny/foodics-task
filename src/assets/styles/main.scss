@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    /* to prevent content from jumping when scrollbar appears */
+    overflow-y: scroll;
+  }
+}

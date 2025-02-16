@@ -1,0 +1,2 @@
+export const SET_BRANCHES = "SET_BRANCHES";
+export const UPDATE_BRANCH = "UPDATE_BRANCH";
