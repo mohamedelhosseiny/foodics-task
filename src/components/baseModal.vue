@@ -22,8 +22,15 @@
         </button>
         <button
           class="px-6 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700"
+          :disabled="isConfirmDisabled"
+          @click="confirm"
         >
-          Save
+          <div v-if="isLoading" class="flex items-center gap-2">
+            <div
+              class="w-4 h-4 border-2 border-white rounded-full animate-spin"
+            ></div>
+          </div>
+          <span v-else>Save</span>
         </button>
       </div>
     </div>
@@ -33,13 +40,17 @@
 <script>
 export default {
   props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
     title: {
       type: String,
       required: true,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    isConfirmDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -51,6 +62,10 @@ export default {
     close() {
       this.$el.close();
       this.$emit("close");
+    },
+
+    confirm() {
+      this.$emit("confirm");
     },
   },
 };
