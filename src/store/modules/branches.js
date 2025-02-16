@@ -81,6 +81,11 @@ const mutations = {
   },
 };
 
+const getters = {
+  branchesAcceptingReservations: (state) =>
+    state.branches.filter((branch) => branch.accepts_reservations),
+};
+
 const state = {
   branches: [],
   areBranchesLoading: false,
@@ -90,5 +95,6 @@ export default {
   state,
   mutations,
   actions,
+  getters,
   namespaced: true,
 };

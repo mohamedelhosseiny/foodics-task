@@ -50,7 +50,8 @@ import {
   GET_BRANCHES,
   DISABLE_RESERVATIONS,
 } from "../store/modules/action-types";
-const { mapState, mapActions } = createNamespacedHelpers("branches");
+const { mapState, mapActions, mapGetters } =
+  createNamespacedHelpers("branches");
 import ReservationsTable from "./reservationsTable.vue";
 import AddBranch from "./addBranch.vue";
 
@@ -73,11 +74,9 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(["branches", "areBranchesLoading"]),
+    ...mapState(["areBranchesLoading"]),
 
-    branchesAcceptingReservations() {
-      return this.branches.filter((branch) => branch.accepts_reservations);
-    },
+    ...mapGetters(["branchesAcceptingReservations"]),
   },
 
   methods: {

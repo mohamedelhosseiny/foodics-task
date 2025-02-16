@@ -33,7 +33,7 @@
 <script>
 import { createNamespacedHelpers } from "vuex";
 import { defineComponent } from "vue";
-const { mapState } = createNamespacedHelpers("branches");
+const { mapState, mapGetters } = createNamespacedHelpers("branches");
 import BranchReservationItem from "./branchReservationItem.vue";
 import BranchReservationItemSkeleton from "./branchReservationItemSkeleton.vue";
 
@@ -46,11 +46,9 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState(["branches", "areBranchesLoading"]),
+    ...mapState(["areBranchesLoading"]),
 
-    branchesAcceptingReservations() {
-      return this.branches.filter((branch) => branch.accepts_reservations);
-    },
+    ...mapGetters(["branchesAcceptingReservations"]),
   },
 });
 </script>
