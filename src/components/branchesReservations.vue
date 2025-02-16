@@ -14,7 +14,11 @@
         <div class="flex justify-end mb-4">
           <button
             @click="isAddBranchModalOpen = true"
+            :disabled="areBranchesLoading"
             class="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50"
+            :class="{
+              'opacity-50 cursor-not-allowed': areBranchesLoading,
+            }"
           >
             Add Branches
           </button>
@@ -47,8 +51,8 @@
     </div>
 
     <add-branch
+      v-if="isAddBranchModalOpen"
       @close="isAddBranchModalOpen = false"
-      :is-open="isAddBranchModalOpen"
     />
   </div>
 </template>
