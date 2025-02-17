@@ -5,7 +5,9 @@
     @confirm="handleSave"
     :is-loading="isSaving"
   >
-    <div class="px-6 py-6 space-y-6 bg-gray-50 h-[600px] overflow-y-auto">
+    <div
+      class="px-6 py-6 space-y-6 bg-gray-50 h-[600px] overflow-y-auto focus-visible:outline-none"
+    >
       <div
         class="bg-blue-50 p-4 text-blue-700 border-y border-blue-200 text-left"
       >
@@ -73,9 +75,16 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from "vue";
+
 import BaseModal from "@/components/baseModal.vue";
 import BaseMultipleSelect from "@/components/baseMultipleSelect.vue";
-import SettingsSlot from "@/components/settingsSlot.vue";
+const SettingsSlot = defineAsyncComponent({
+  loader: () => import("@/components/settingsSlot.vue"),
+  loadingComponent: {
+    template: "<div class='italic'>Loading...</div>",
+  },
+});
 import { createNamespacedHelpers } from "vuex";
 import {
   UPDATE_BRANCH_SETTINGS,
