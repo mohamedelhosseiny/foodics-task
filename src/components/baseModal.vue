@@ -1,7 +1,7 @@
 <template>
   <dialog
     @click.self="close"
-    class="w-[500px] bg-white rounded-lg shadow-lg p-0"
+    class="w-[550px] bg-white rounded-lg shadow-lg p-0"
   >
     <div class="px-6 py-4 border-b">
       <h2 class="text-xl font-bold text-left">{{ title }}</h2>
@@ -13,7 +13,7 @@
 
     <div class="px-6 py-4 border-t flex justify-end items-center gap-3">
       <slot name="actions-left" />
-      <div class="flex gap-3">
+      <div class="ml-auto flex gap-3">
         <button
           @click="close"
           class="px-6 py-2 rounded-lg border border-gray-200 hover:bg-gray-50"
@@ -56,6 +56,11 @@ export default {
 
   mounted() {
     this.$el.showModal();
+    window.addEventListener("keydown", this.handleKeyDown);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.handleKeyDown);
   },
 
   methods: {
@@ -66,6 +71,12 @@ export default {
 
     confirm() {
       this.$emit("confirm");
+    },
+
+    handleKeyDown(event) {
+      if (event.key === "Escape") {
+        this.close();
+      }
     },
   },
 };
