@@ -16,6 +16,7 @@
           v-for="branch in branchesAcceptingReservations"
           :key="branch.id"
           :branch="branch"
+          @click.native="openSettings(branch)"
         />
       </template>
       <template v-else>
@@ -27,6 +28,12 @@
         </div>
       </template>
     </template>
+
+    <branch-settings-modal
+      v-if="selectedBranch"
+      :branch="selectedBranch"
+      @close="selectedBranch = null"
+    />
   </div>
 </template>
 
@@ -36,6 +43,7 @@ import { defineComponent } from "vue";
 const { mapState, mapGetters } = createNamespacedHelpers("branches");
 import BranchReservationItem from "./branchReservationItem.vue";
 import BranchReservationItemSkeleton from "./branchReservationItemSkeleton.vue";
+import BranchSettingsModal from "./branchSettingsModal.vue";
 
 export default defineComponent({
   name: "ReservationsTable",
@@ -43,12 +51,25 @@ export default defineComponent({
   components: {
     BranchReservationItem,
     BranchReservationItemSkeleton,
+    BranchSettingsModal,
+  },
+
+  data() {
+    return {
+      selectedBranch: null,
+    };
   },
 
   computed: {
     ...mapState(["areBranchesLoading"]),
 
     ...mapGetters(["branchesAcceptingReservations"]),
+  },
+
+  methods: {
+    openSettings(branch) {
+      this.selectedBranch = branch;
+    },
   },
 });
 </script>
