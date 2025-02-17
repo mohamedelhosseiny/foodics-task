@@ -209,7 +209,9 @@ export default {
         })
         .finally(() => {
           this.isSaving = false;
-          this.$emit("close");
+          if (!Object.keys(this.errors).length) {
+            this.$emit("close");
+          }
         });
     },
 
