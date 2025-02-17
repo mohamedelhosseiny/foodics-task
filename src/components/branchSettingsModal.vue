@@ -57,7 +57,14 @@
       </div>
     </div>
     <template #actions-left>
-      <button class="text-red-500 hover:text-red-600">
+      <button
+        @click="handleDisableReservations"
+        class="text-red-500 hover:text-red-600"
+        :disabled="isDisablingReservations"
+        :class="{
+          'opacity-50 cursor-not-allowed': isDisablingReservations,
+        }"
+      >
         Disable Reservations
       </button>
     </template>
@@ -69,7 +76,10 @@ import BaseModal from "@/components/baseModal.vue";
 import BaseMultipleSelect from "@/components/baseMultipleSelect.vue";
 import SettingsSlot from "@/components/settingsSlot.vue";
 import { createNamespacedHelpers } from "vuex";
-import { UPDATE_BRANCH_SETTINGS } from "../store/modules/action-types";
+import {
+  UPDATE_BRANCH_SETTINGS,
+  DISABLE_BRANCH_RESERVATIONS,
+} from "../store/modules/action-types";
 
 const { mapActions } = createNamespacedHelpers("branches");
 
@@ -92,6 +102,7 @@ export default {
   data() {
     return {
       isSaving: false,
+      isDisablingReservations: false,
       form: {
         duration: 30,
         tables: [],
@@ -151,6 +162,7 @@ export default {
   methods: {
     ...mapActions({
       updateBranchSettings: UPDATE_BRANCH_SETTINGS,
+      disableBranchReservations: DISABLE_BRANCH_RESERVATIONS,
     }),
 
     async handleSave() {
@@ -191,6 +203,14 @@ export default {
     handleApplyOnAllDays() {
       this.workingDays.forEach((day) => {
         this.form.workingHours[day] = [...this.form.workingHours["saturday"]];
+      });
+    },
+
+    async handleDisableReservations() {
+      this.isDisablingReservations = true;
+      await this.disableBranchReservations(this.branch.id).finally(() => {
+        this.isDisablingReservations = false;
+        this.$emit("close");
       });
     },
   },
