@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="relative group">
     <vue-timepicker
       format="HH:mm"
       placeholder="00:00"
@@ -9,7 +9,7 @@
       input-width="50px"
       v-model="fromTime"
     />
-    <span>:</span>
+    <span>-</span>
     <vue-timepicker
       format="HH:mm"
       placeholder="00:00"
@@ -19,6 +19,12 @@
       input-width="50px"
       v-model="toTime"
     />
+    <button
+      @click="$emit('remove')"
+      class="absolute -right-[14px] -top-4 items-center justify-center w-5 h-5 bg-white border rounded-full text-gray-400 hover:text-gray-600"
+    >
+      ×
+    </button>
   </div>
 </template>
 
@@ -40,8 +46,8 @@ export default {
 
   data() {
     return {
-      fromTime: this.initialValue[0],
-      toTime: this.initialValue[1],
+      fromTime: [],
+      toTime: [],
     };
   },
 
@@ -55,6 +61,14 @@ export default {
     slotValue(value) {
       this.$emit("update", value);
     },
+
+    initialValue: {
+      handler(value) {
+        this.fromTime = value[0];
+        this.toTime = value[1];
+      },
+      immediate: true,
+    },
   },
 };
 </script>
@@ -65,6 +79,7 @@ export default {
     input {
       border: none;
       outline: none;
+      height: auto;
     }
 
     .controls {

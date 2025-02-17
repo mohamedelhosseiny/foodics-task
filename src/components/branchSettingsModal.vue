@@ -46,6 +46,7 @@
           :working-hours="form.workingHours[day]"
           @update="handleUpdateWorkingHours($event, day)"
           @add-slot="handleAddSlot(day)"
+          @remove-slot="handleRemoveSlot($event, day)"
         />
       </div>
     </div>
@@ -163,6 +164,14 @@ export default {
     handleAddSlot(day) {
       console.log(day);
       this.form.workingHours[day].push(["00:00", "00:00"]);
+    },
+
+    handleRemoveSlot(index, day) {
+      console.log(this.form.workingHours[day], index);
+      this.form.workingHours[day] = this.form.workingHours[day].filter(
+        (slot, slotIndex) => slotIndex !== index
+      );
+      console.log(this.form.workingHours[day]);
     },
   },
 };
