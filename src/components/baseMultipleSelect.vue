@@ -63,6 +63,12 @@
         />
         {{ item.label }}
       </div>
+      <div
+        class="px-3 py-2 min-h-[100px] flex items-center justify-center"
+        v-if="availableItems.length === 0"
+      >
+        <span class="text-gray-500">No items found</span>
+      </div>
     </div>
   </div>
 </template>
