@@ -6,7 +6,7 @@
     :is-confirm-disabled="!selectedBranch || isLoading"
     :is-loading="isLoading"
   >
-    <div class="bg-gray-100 p-4 h-[300px] overflow-hidden">
+    <div class="bg-gray-50 p-4 h-[300px] overflow-hidden">
       <label class="text-sm font-medium text-left block mb-2"> Branches </label>
       <base-single-select
         :value="selectedBranch"
