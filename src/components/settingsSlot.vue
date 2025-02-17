@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center gap-2 border border-gray-200 p-2 rounded-lg bg-white"
+    class="flex items-center gap-2 border border-gray-200 p-2 rounded-lg bg-white h-[56px]"
   >
     <div class="flex gap-2 flex-wrap">
       <template v-if="workingHours.length">
