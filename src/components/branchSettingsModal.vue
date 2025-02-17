@@ -38,6 +38,7 @@
           <button
             v-if="day === 'saturday'"
             class="text-purple-600 text-sm hover:text-purple-700"
+            @click="handleApplyOnAllDays"
           >
             Apply on all days
           </button>
@@ -95,6 +96,16 @@ export default {
           friday: [],
         },
       },
+
+      workingDays: [
+        "saturday",
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+      ],
     };
   },
 
@@ -108,18 +119,6 @@ export default {
   },
 
   computed: {
-    workingDays() {
-      return [
-        "saturday",
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-      ];
-    },
-
     availableTables() {
       const tables = [];
 
@@ -162,16 +161,19 @@ export default {
     },
 
     handleAddSlot(day) {
-      console.log(day);
       this.form.workingHours[day].push(["00:00", "00:00"]);
     },
 
     handleRemoveSlot(index, day) {
-      console.log(this.form.workingHours[day], index);
       this.form.workingHours[day] = this.form.workingHours[day].filter(
         (slot, slotIndex) => slotIndex !== index
       );
-      console.log(this.form.workingHours[day]);
+    },
+
+    handleApplyOnAllDays() {
+      this.workingDays.forEach((day) => {
+        this.form.workingHours[day] = this.form.workingHours["saturday"];
+      });
     },
   },
 };
