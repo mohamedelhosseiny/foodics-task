@@ -5,7 +5,7 @@
     @confirm="handleSave"
     :is-loading="isSaving"
   >
-    <div class="px-6 py-6 space-y-6 bg-gray-50">
+    <div class="px-6 py-6 space-y-6 bg-gray-50 h-[600px] overflow-y-auto">
       <div
         class="bg-blue-50 p-4 text-blue-700 border-y border-blue-200 text-left"
       >
@@ -68,6 +68,10 @@
 import BaseModal from "@/components/baseModal.vue";
 import BaseMultipleSelect from "@/components/baseMultipleSelect.vue";
 import SettingsSlot from "@/components/settingsSlot.vue";
+import { createNamespacedHelpers } from "vuex";
+import { UPDATE_BRANCH_SETTINGS } from "../store/modules/action-types";
+
+const { mapActions } = createNamespacedHelpers("branches");
 
 export default {
   name: "BranchSettingsModal",
@@ -145,9 +149,18 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      updateBranchSettings: UPDATE_BRANCH_SETTINGS,
+    }),
+
     async handleSave() {
       this.isSaving = true;
       try {
+        await this.updateBranchSettings({
+          branchId: this.branch.id,
+          reservationDuration: this.form.duration,
+          reservationTimes: this.form.workingHours,
+        });
         this.$emit("close");
       } finally {
         this.isSaving = false;
