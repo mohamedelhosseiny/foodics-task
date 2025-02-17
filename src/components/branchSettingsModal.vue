@@ -57,6 +57,18 @@
           @add-slot="handleAddSlot(day)"
           @remove-slot="handleRemoveSlot($event, day)"
         />
+        <div
+          v-if="errors[`reservation_times.${day}`]"
+          class="text-red-500 text-sm"
+        >
+          <p
+            class="text-left"
+            v-for="error in errors[`reservation_times.${day}`]"
+            :key="error"
+          >
+            {{ error }}
+          </p>
+        </div>
       </div>
     </div>
     <template #actions-left>
@@ -127,6 +139,8 @@ export default {
         },
       },
 
+      errors: {},
+
       workingDays: [
         "saturday",
         "sunday",
@@ -141,11 +155,13 @@ export default {
 
   created() {
     this.form.duration = this.branch.reservation_duration;
-    this.workingDays.forEach((day) => {
-      this.form.workingHours[day] = this.sortSlots(
-        this.branch.reservation_times[day]
-      );
-    });
+    if (this.branch.reservation_times) {
+      this.workingDays.forEach((day) => {
+        this.form.workingHours[day] = this.sortSlots(
+          this.branch.reservation_times[day]
+        );
+      });
+    }
   },
 
   computed: {
@@ -181,18 +197,20 @@ export default {
       }
     },
 
-    async handleSave() {
+    handleSave() {
       this.isSaving = true;
-      try {
-        await this.updateBranchSettings({
-          branchId: this.branch.id,
-          reservationDuration: this.form.duration,
-          reservationTimes: this.form.workingHours,
+      this.updateBranchSettings({
+        branchId: this.branch.id,
+        reservationDuration: this.form.duration,
+        reservationTimes: this.form.workingHours,
+      })
+        .catch((error) => {
+          this.errors = error.response.data?.errors;
+        })
+        .finally(() => {
+          this.isSaving = false;
+          this.$emit("close");
         });
-        this.$emit("close");
-      } finally {
-        this.isSaving = false;
-      }
     },
 
     sortSlots(day) {
@@ -207,7 +225,7 @@ export default {
     },
 
     handleAddSlot(day) {
-      this.form.workingHours[day].push(["00:00", "00:00"]);
+      this.form.workingHours[day].push(["00:00", "01:00"]);
     },
 
     handleRemoveSlot(index, day) {
