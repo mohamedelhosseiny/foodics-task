@@ -17,7 +17,9 @@
       </span>
     </div>
     <button
-      class="px-1 text-gray-400 hover:text-gray-600 rounded-lg border ml-auto"
+      @click="handleAddSlot"
+      class="px-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg border ml-auto"
+      :disabled="workingHours.length >= 3"
     >
       +
     </button>
@@ -45,23 +47,11 @@ export default {
       this.$emit("update", { updatedSlot: value, updatedSlotIndex: index });
     },
 
+    handleAddSlot() {
+      if (this.workingHours.length < 3) {
+        this.$emit("add-slot");
+      }
+    },
   },
 };
 </script>
-
-<style scoped>
-input[type="time"]::-webkit-calendar-picker-indicator {
-  display: none;
-}
-
-/* Ensure only HH:MM is displayed */
-input[type="time"] {
-  -webkit-appearance: none; /* Remove default styling */
-  appearance: none;
-}
-
-/* Override styles for some browsers */
-input[type="time"]::-webkit-datetime-edit-ampm-field {
-  display: none;
-}
-</style>

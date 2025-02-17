@@ -143,7 +143,6 @@ export default {
     async handleSave() {
       this.isSaving = true;
       try {
-        // Save logic here
         this.$emit("close");
       } finally {
         this.isSaving = false;
@@ -161,6 +160,10 @@ export default {
       );
     },
 
+    handleAddSlot(day) {
+      console.log(day);
+      this.form.workingHours[day].push(["00:00", "00:00"]);
+    },
   },
 };
 </script>
