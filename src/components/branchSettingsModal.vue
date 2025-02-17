@@ -23,7 +23,8 @@
           :class="{
             'border-red-500': !form.duration,
           }"
-          min="0"
+          min="30"
+          @blur="handleDurationBlur"
           class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
         />
       </div>
@@ -164,6 +165,12 @@ export default {
       updateBranchSettings: UPDATE_BRANCH_SETTINGS,
       disableBranchReservations: DISABLE_BRANCH_RESERVATIONS,
     }),
+
+    handleDurationBlur() {
+      if (this.form.duration < 30) {
+        this.form.duration = 30;
+      }
+    },
 
     async handleSave() {
       this.isSaving = true;
