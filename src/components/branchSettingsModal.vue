@@ -4,6 +4,7 @@
     @close="$emit('close')"
     @confirm="handleSave"
     :is-loading="isSaving"
+    :is-confirm-disabled="isSaving"
   >
     <div
       class="px-6 py-6 space-y-6 bg-gray-50 h-[600px] overflow-y-auto focus-visible:outline-none"
