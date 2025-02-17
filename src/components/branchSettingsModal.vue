@@ -19,6 +19,11 @@
         <input
           v-model="form.duration"
           type="number"
+          placeholder="30 minutes"
+          :class="{
+            'border-red-500': !form.duration,
+          }"
+          min="0"
           class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-100 focus:border-blue-400"
         />
       </div>
@@ -172,7 +177,7 @@ export default {
 
     handleApplyOnAllDays() {
       this.workingDays.forEach((day) => {
-        this.form.workingHours[day] = this.form.workingHours["saturday"];
+        this.form.workingHours[day] = [...this.form.workingHours["saturday"]];
       });
     },
   },
