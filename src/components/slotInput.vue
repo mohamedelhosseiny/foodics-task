@@ -45,19 +45,15 @@ export default {
     };
   },
 
-  methods: {
-    handleInput(event, field) {
-      console.log(event.target.value);
+  computed: {
+    slotValue() {
+      return [this.fromTime, this.toTime];
+    },
+  },
 
-      this[field] = event.target.value.replace(/[^0-9]/g, "");
-
-      if (this[field] < 10) {
-        this[field] = `0${this[field]}`;
-      }
-
-      if (this[field] > 23) {
-        this[field] = `23`;
-      }
+  watch: {
+    slotValue(value) {
+      this.$emit("update", value);
     },
   },
 };

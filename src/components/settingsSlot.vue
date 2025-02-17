@@ -4,12 +4,15 @@
   >
     <div class="flex gap-2 flex-wrap">
       <span
-        v-for="(value, key) in workingHours"
-        :key="key"
+        v-for="(value, index) in workingHours"
+        :key="index"
         class="inline-flex items-center gap-1 px-3 py-1 border border-purple-600 rounded-lg text-sm"
       >
         <div class="flex gap-1">
-          <slot-input :initial-value="value" />
+          <slot-input
+            :initial-value="value"
+            @update="handleUpdate($event, index)"
+          />
         </div>
       </span>
     </div>
@@ -35,6 +38,13 @@ export default {
       required: true,
       default: () => [],
     },
+  },
+
+  methods: {
+    handleUpdate(value, index) {
+      this.$emit("update", { updatedSlot: value, updatedSlotIndex: index });
+    },
+
   },
 };
 </script>

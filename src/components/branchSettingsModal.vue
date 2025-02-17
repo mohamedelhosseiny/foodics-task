@@ -42,7 +42,11 @@
             Apply on all days
           </button>
         </div>
-        <settings-slot :working-hours="form.workingHours[day]" />
+        <settings-slot
+          :working-hours="form.workingHours[day]"
+          @update="handleUpdateWorkingHours($event, day)"
+          @add-slot="handleAddSlot(day)"
+        />
       </div>
     </div>
     <template #actions-left>
@@ -149,6 +153,14 @@ export default {
     sortSlots(day) {
       return day.sort((a, b) => a[0].localeCompare(b[0]));
     },
+
+    handleUpdateWorkingHours({ updatedSlot, updatedSlotIndex }, day) {
+      this.form.workingHours[day] = this.form.workingHours[day].map(
+        (existingSlot, existingSlotIndex) =>
+          existingSlotIndex === updatedSlotIndex ? updatedSlot : existingSlot
+      );
+    },
+
   },
 };
 </script>
