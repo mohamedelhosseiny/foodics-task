@@ -90,8 +90,8 @@
 <script>
 import { defineAsyncComponent } from "vue";
 
-import BaseModal from "@/components/baseModal.vue";
-import BaseMultipleSelect from "@/components/baseMultipleSelect.vue";
+import BaseModal from "@/components/base-components/baseModal.vue";
+import BaseMultipleSelect from "@/components/base-components/baseMultipleSelect.vue";
 const SettingsSlot = defineAsyncComponent({
   loader: () => import("@/components/settingsSlot.vue"),
   loadingComponent: {

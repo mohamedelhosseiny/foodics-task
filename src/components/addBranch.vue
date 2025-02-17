@@ -20,11 +20,11 @@
 </template>
 
 <script>
-import BaseModal from "./baseModal.vue";
+import BaseModal from "./base-components/baseModal.vue";
 import { defineComponent } from "vue";
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapActions } = createNamespacedHelpers("branches");
-import BaseMultipleSelect from "./baseMultipleSelect.vue";
+import BaseMultipleSelect from "./base-components/baseMultipleSelect.vue";
 import { ENABLE_BRANCHES_RESERVATIONS } from "../store/modules/action-types";
 
 export default defineComponent({
