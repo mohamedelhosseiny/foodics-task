@@ -13,9 +13,10 @@ const actions = {
   [GET_BRANCHES]({ commit }) {
     commit(SET_BRANCHES_LOADING, true);
 
-    api("branches?include[0]=sections&include[1]=sections.tables")
-      .then((data) => {
-        commit(SET_BRANCHES, data.data);
+    api
+      .get("branches?include[0]=sections&include[1]=sections.tables")
+      .then((response) => {
+        commit(SET_BRANCHES, response.data.data);
       })
       .finally(() => {
         commit(SET_BRANCHES_LOADING, false);
@@ -23,23 +24,23 @@ const actions = {
   },
 
   [ENABLE_BRANCH_RESERVATIONS]({ commit }, branchId) {
-    return api(`branches/${branchId}`, {
-      method: "PUT",
-      body: {
+    return api
+      .put(`branches/${branchId}`, {
         accepts_reservations: true,
-      },
-    }).then(() => {
-      commit(ENABLE_BRANCH_RESERVATIONS, branchId);
-    });
+      })
+      .then(() => {
+        commit(ENABLE_BRANCH_RESERVATIONS, branchId);
+      });
   },
 
   [DISABLE_BRANCH_RESERVATIONS]({ commit }, branchId) {
-    return api(`branches/${branchId}`, {
-      method: "PUT",
-      body: { accepts_reservations: false },
-    }).then(() => {
-      commit(DISABLE_BRANCH_RESERVATIONS, branchId);
-    });
+    return api
+      .put(`branches/${branchId}`, {
+        accepts_reservations: false,
+      })
+      .then(() => {
+        commit(DISABLE_BRANCH_RESERVATIONS, branchId);
+      });
   },
 
   [DISABLE_RESERVATIONS]({ commit }) {
@@ -51,9 +52,8 @@ const actions = {
 
     Promise.all(
       branchesAcceptingReservations.map((branch) =>
-        api(`branches/${branch.id}`, {
-          method: "PUT",
-          body: { accepts_reservations: false },
+        api.put(`branches/${branch.id}`, {
+          accepts_reservations: false,
         })
       )
     )
@@ -69,19 +69,18 @@ const actions = {
     { commit },
     { branchId, reservationDuration, reservationTimes }
   ) {
-    return api(`branches/${branchId}`, {
-      method: "PUT",
-      body: {
+    return api
+      .put(`branches/${branchId}`, {
         reservation_duration: reservationDuration,
         reservation_times: reservationTimes,
-      },
-    }).then(() => {
-      commit(UPDATE_BRANCH_SETTINGS, {
-        branchId,
-        reservationDuration,
-        reservationTimes,
+      })
+      .then(() => {
+        commit(UPDATE_BRANCH_SETTINGS, {
+          branchId,
+          reservationDuration,
+          reservationTimes,
+        });
       });
-    });
   },
 };
 
