@@ -1,7 +1,7 @@
 import {
   GET_BRANCHES,
   SET_BRANCHES_LOADING,
-  ENABLE_BRANCH_RESERVATIONS,
+  ENABLE_BRANCHES_RESERVATIONS,
   DISABLE_RESERVATIONS,
   UPDATE_BRANCH_SETTINGS,
   DISABLE_BRANCH_RESERVATIONS,
@@ -23,14 +23,16 @@ const actions = {
       });
   },
 
-  [ENABLE_BRANCH_RESERVATIONS]({ commit }, branchId) {
-    return api
-      .put(`branches/${branchId}`, {
-        accepts_reservations: true,
+  [ENABLE_BRANCHES_RESERVATIONS]({ commit }, branchesIds) {
+    return Promise.all(
+      branchesIds.map((branchId) => {
+        return api.put(`branches/${branchId}`, {
+          accepts_reservations: true,
+        });
       })
-      .then(() => {
-        commit(ENABLE_BRANCH_RESERVATIONS, branchId);
-      });
+    ).then(() => {
+      commit(ENABLE_BRANCHES_RESERVATIONS, branchesIds);
+    });
   },
 
   [DISABLE_BRANCH_RESERVATIONS]({ commit }, branchId) {
@@ -93,9 +95,9 @@ const mutations = {
     state.areBranchesLoading = loading;
   },
 
-  [ENABLE_BRANCH_RESERVATIONS](state, branchId) {
+  [ENABLE_BRANCHES_RESERVATIONS](state, branchesIds) {
     state.branches = state.branches.map((branch) =>
-      branch.id === branchId
+      branchesIds.includes(branch.id)
         ? { ...branch, accepts_reservations: true }
         : branch
     );
