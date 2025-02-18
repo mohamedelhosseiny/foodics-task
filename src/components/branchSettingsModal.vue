@@ -225,6 +225,7 @@ export default {
         (existingSlot, existingSlotIndex) =>
           existingSlotIndex === updatedSlotIndex ? updatedSlot : existingSlot
       );
+      this.errors = {};
     },
 
     handleAddSlot(day) {
@@ -235,6 +236,7 @@ export default {
       this.form.workingHours[day] = this.form.workingHours[day].filter(
         (slot, slotIndex) => slotIndex !== index
       );
+      this.errors = {};
     },
 
     handleApplyOnAllDays() {
