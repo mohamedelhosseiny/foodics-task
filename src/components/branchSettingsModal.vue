@@ -163,6 +163,10 @@ export default {
         );
       });
     }
+
+    this.form.tables = this.availableTables.filter(
+      (table) => table.accepts_reservations
+    );
   },
 
   computed: {
@@ -174,6 +178,7 @@ export default {
           tables.push({
             value: table.id,
             label: `${section.name} - ${table.name}`,
+            accepts_reservations: table.accepts_reservations,
           });
         });
       });
