@@ -9,7 +9,7 @@
         <span
           v-for="item in selectedItems.slice(0, 2)"
           :key="item.value"
-          class="items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm max-w-[170px] truncate flex"
+          class="items-center gap-1 px-3 py-1 border border-purple-600 rounded-lg text-sm text-black max-w-[170px] truncate flex"
         >
           <span class="max-w-[140px] truncate block">{{ item.label }}</span>
           <button
@@ -21,9 +21,9 @@
         </span>
         <span
           v-if="selectedItems.length > 2"
-          class="rounded-full bg-blue-50 px-2 py-1 text-blue-600 text-sm inline-flex items-center"
+          class="rounded-full bg-white px-2 py-1 text-black border border-purple-600 text-sm inline-flex items-center"
         >
-          + {{ selectedItems.length - 2 }}
+          +{{ selectedItems.length - 2 }}
         </span>
       </div>
 
@@ -62,6 +62,12 @@
           @click.stop
         />
         {{ item.label }}
+      </div>
+      <div
+        class="px-3 py-2 min-h-[100px] flex items-center justify-center"
+        v-if="availableItems.length === 0"
+      >
+        <span class="text-gray-500">No items found</span>
       </div>
     </div>
   </div>

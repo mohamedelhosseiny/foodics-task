@@ -4,6 +4,7 @@
     @close="$emit('close')"
     @confirm="handleSave"
     :is-loading="isSaving"
+    :is-confirm-disabled="isSaving"
   >
     <div
       class="px-6 py-6 space-y-6 bg-gray-50 h-[600px] overflow-y-auto focus-visible:outline-none"
@@ -89,8 +90,8 @@
 <script>
 import { defineAsyncComponent } from "vue";
 
-import BaseModal from "@/components/baseModal.vue";
-import BaseMultipleSelect from "@/components/baseMultipleSelect.vue";
+import BaseModal from "@/components/base-components/baseModal.vue";
+import BaseMultipleSelect from "@/components/base-components/baseMultipleSelect.vue";
 const SettingsSlot = defineAsyncComponent({
   loader: () => import("@/components/settingsSlot.vue"),
   loadingComponent: {
@@ -209,7 +210,9 @@ export default {
         })
         .finally(() => {
           this.isSaving = false;
-          this.$emit("close");
+          if (!Object.keys(this.errors).length) {
+            this.$emit("close");
+          }
         });
     },
 
@@ -222,6 +225,7 @@ export default {
         (existingSlot, existingSlotIndex) =>
           existingSlotIndex === updatedSlotIndex ? updatedSlot : existingSlot
       );
+      this.errors = {};
     },
 
     handleAddSlot(day) {
@@ -232,6 +236,7 @@ export default {
       this.form.workingHours[day] = this.form.workingHours[day].filter(
         (slot, slotIndex) => slotIndex !== index
       );
+      this.errors = {};
     },
 
     handleApplyOnAllDays() {

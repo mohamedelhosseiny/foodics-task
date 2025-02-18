@@ -3,16 +3,16 @@
     @close="$emit('close')"
     @confirm="handleConfirm"
     title="Add Branches"
-    :is-confirm-disabled="!selectedBranch || isLoading"
+    :is-confirm-disabled="!selectedBranches.length || isLoading"
     :is-loading="isLoading"
   >
     <div class="bg-gray-50 p-4 h-[300px] overflow-hidden">
       <label class="text-sm font-medium text-left block mb-2"> Branches </label>
-      <base-single-select
-        :value="selectedBranch"
-        @input="handleSelectedBranch"
+      <base-multiple-select
+        :value="selectedBranches"
+        @input="handleSelectedBranches"
         :options="branchesNotAcceptingReservations"
-        placeholder="Select a branch..."
+        placeholder="Select branches"
         :max-height="150"
       />
     </div>
@@ -20,13 +20,12 @@
 </template>
 
 <script>
-import BaseModal from "./baseModal.vue";
+import BaseModal from "./base-components/baseModal.vue";
 import { defineComponent } from "vue";
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapActions } = createNamespacedHelpers("branches");
-import BaseMultipleSelect from "./baseMultipleSelect.vue";
-import BaseSingleSelect from "./baseSingleSelect.vue";
-import { ENABLE_BRANCH_RESERVATIONS } from "../store/modules/action-types";
+import BaseMultipleSelect from "./base-components/baseMultipleSelect.vue";
+import { ENABLE_BRANCHES_RESERVATIONS } from "../store/modules/action-types";
 
 export default defineComponent({
   name: "AddBranch",
@@ -34,12 +33,11 @@ export default defineComponent({
   components: {
     BaseModal,
     BaseMultipleSelect,
-    BaseSingleSelect,
   },
 
   data() {
     return {
-      selectedBranch: null,
+      selectedBranches: [],
       isLoading: false,
     };
   },
@@ -59,21 +57,21 @@ export default defineComponent({
 
   methods: {
     ...mapActions({
-      enableBranchReservations: ENABLE_BRANCH_RESERVATIONS,
+      enableBranchesReservations: ENABLE_BRANCHES_RESERVATIONS,
     }),
 
-    handleSelectedBranch(value) {
-      this.selectedBranch = value;
+    handleSelectedBranches(value) {
+      this.selectedBranches = value;
     },
 
     async handleConfirm() {
       this.isLoading = true;
-      await this.enableBranchReservations(this.selectedBranch);
+      await this.enableBranchesReservations(
+        this.selectedBranches.map((branch) => branch.value)
+      );
       this.isLoading = false;
       this.$emit("close");
     },
   },
 });
 </script>
-
-<style lang="scss" scoped></style>
