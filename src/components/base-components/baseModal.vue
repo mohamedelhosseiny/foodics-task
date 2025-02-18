@@ -25,7 +25,10 @@
           :disabled="isConfirmDisabled"
           @click="confirm"
         >
-          <div v-if="isLoading" class="flex items-center gap-2">
+          <div
+            v-if="isLoading"
+            class="flex items-center justify-center gap-2 w-[36px]"
+          >
             <div
               class="w-4 h-4 border-2 border-white rounded-full animate-spin"
             ></div>
