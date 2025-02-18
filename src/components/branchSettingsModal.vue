@@ -35,7 +35,8 @@
       <div class="space-y-2">
         <label class="block text-gray-700 text-left">Tables</label>
         <base-multiple-select
-          v-model="form.tables"
+          :value="form.tables"
+          @input="handleUpdateTables"
           :options="availableTables"
           placeholder="Select tables..."
         />
@@ -59,7 +60,7 @@
           @remove-slot="handleRemoveSlot($event, day)"
         />
         <div
-          v-if="errors[`reservation_times.${day}`]"
+          v-if="errors?.[`reservation_times.${day}`]"
           class="text-red-500 text-sm"
         >
           <p
@@ -156,6 +157,7 @@ export default {
 
   created() {
     this.form.duration = this.branch.reservation_duration;
+
     if (this.branch.reservation_times) {
       this.workingDays.forEach((day) => {
         this.form.workingHours[day] = this.sortSlots(
@@ -163,6 +165,11 @@ export default {
         );
       });
     }
+
+    // initially select tables accepting reservations
+    this.form.tables = this.availableTables.filter(
+      (table) => table.accepts_reservations
+    );
   },
 
   computed: {
@@ -174,6 +181,7 @@ export default {
           tables.push({
             value: table.id,
             label: `${section.name} - ${table.name}`,
+            accepts_reservations: table.accepts_reservations,
           });
         });
       });
@@ -183,6 +191,26 @@ export default {
 
     workingHours() {
       return `${this.branch.opening_from} - ${this.branch.opening_to}`;
+    },
+
+    branchesAcceptingReservationsMap() {
+      const map = {};
+
+      this.form.tables.forEach((table) => {
+        map[table.value] = true;
+      });
+
+      return map;
+    },
+
+    formattedTablesForUpdate() {
+      return this.availableTables.map((table) => {
+        return {
+          id: table.value,
+          accepts_reservations:
+            table.value in this.branchesAcceptingReservationsMap,
+        };
+      });
     },
   },
 
@@ -204,6 +232,7 @@ export default {
         branchId: this.branch.id,
         reservationDuration: this.form.duration,
         reservationTimes: this.form.workingHours,
+        tables: this.formattedTablesForUpdate,
       })
         .catch((error) => {
           this.errors = error.response.data?.errors;
@@ -214,6 +243,10 @@ export default {
             this.$emit("close");
           }
         });
+    },
+
+    handleUpdateTables(tables) {
+      this.form.tables = tables;
     },
 
     sortSlots(day) {

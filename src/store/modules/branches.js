@@ -5,6 +5,7 @@ import {
   DISABLE_RESERVATIONS,
   UPDATE_BRANCH_SETTINGS,
   DISABLE_BRANCH_RESERVATIONS,
+  UPDATE_BRANCH_TABLES,
 } from "./action-types";
 import { SET_BRANCHES } from "./mutation-types";
 import api from "@/services/api";
@@ -68,21 +69,31 @@ const actions = {
   },
 
   [UPDATE_BRANCH_SETTINGS](
-    { commit },
-    { branchId, reservationDuration, reservationTimes }
+    { dispatch },
+    { branchId, reservationDuration, reservationTimes, tables }
   ) {
-    return api
-      .put(`branches/${branchId}`, {
+    // currently all tables are updated every time the branch settings are updated
+    // this should be enhanced to only update the tables that were updated
+    // but for the sake of time, we are updating all tables every time
+    return Promise.all([
+      api.put(`branches/${branchId}`, {
         reservation_duration: reservationDuration,
         reservation_times: reservationTimes,
-      })
-      .then(() => {
-        commit(UPDATE_BRANCH_SETTINGS, {
-          branchId,
-          reservationDuration,
-          reservationTimes,
+      }),
+      dispatch(UPDATE_BRANCH_TABLES, tables),
+    ]).then(() => {
+      dispatch(GET_BRANCHES);
+    });
+  },
+
+  [UPDATE_BRANCH_TABLES](context, tables) {
+    return Promise.all(
+      tables.map((table) => {
+        return api.put(`tables/${table.id}`, {
+          accepts_reservations: table.accepts_reservations,
         });
-      });
+      })
+    );
   },
 };
 
